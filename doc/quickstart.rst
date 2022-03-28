@@ -77,7 +77,7 @@ This becomes especially handy when you try to compute things on multiple dataset
 3. Determine if your axes are periodic or define a boundary condition.
     You can specify this either for all axes ``Grid(ds, periodic=False, boundary='fill')``
     or per axis, by passing a list/dictionary with separate axis names ``Grid(ds, periodic=['X'], boundary={'Y':'fill'}``.
-    The boundary condition is used for operations at the boundary points, when an extra point needs to be added.
+    The boundary condition is used for operations at the boundary points (of the array, not physical boundaries like continents), when an extra point needs to be added.
 4. Parse the `metrics <grid_metrics.ipynb>`_.
     For this you should find out all the variables in your dataset that represent a metric (distance, area, volume),
     and sort them according to the axis or axes they represent. You can then pass a dictionary with a tuple of the representative axis/axes as key
