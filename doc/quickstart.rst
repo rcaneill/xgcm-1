@@ -95,3 +95,42 @@ Finally put all those steps together:
                 boundary = [], #From step 3
                 metrics = {...}, # From step 4
                 )
+
+Explanation of the grid object output
+-------------------------------------
+
+You can get information about the grid by printing it:
+
+.. code-block:: python
+
+    print(grid)
+
+You should get a result looking similar to:
+
+.. code-block:: python
+
+    <xgcm.Grid>
+    X Axis (periodic, boundary=None):
+      * center   xq --> left
+      * left     xh --> center
+    Z Axis (not periodic, boundary='extend'):
+      * center   z_center --> right
+      * right    z_face   --> center
+
+First, we see the list of all axes detected, here ``X`` and ``Z``.
+
+Followed in the parenthesis, are the default periodic and boundary conditions for each axis.
+Please mind that the following version of xgcm will refactor these names.
+
+Then for each axis the positions are shown. Here the ``X`` axis has 2 positions,
+``center`` and ``left``, and the ``Z`` axis also has 2 positions, ``center`` and ``right``.
+5 positions are available in xgcm, ``center``, ``left``, ``right``, ``inner`` and ``outer``,
+:ref:`see the positions doc <axis_position>`
+
+Following the position, is the name of the dataset dimension, e.g.
+``xq`` is the name of the dimension of the ``center`` position of the ``X`` axis,
+and ``xh``the name of the dimension of the ``left``  position of the ``X`` axis.
+
+The arrow ``-->`` indicates the default shift (used for grid operations).
+It is possible to use xgcm without understanding the shifts, as the grid object
+handles these shifts.
