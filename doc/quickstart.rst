@@ -134,3 +134,70 @@ and ``xh``the name of the dimension of the ``left``  position of the ``X`` axis.
 The arrow ``-->`` indicates the default shift (used for grid operations).
 It is possible to use xgcm without understanding the shifts, as the grid object
 handles these shifts.
+
+
+What do the metrics represent?
+------------------------------
+
+Simple periodic case
+....................
+
+Let's define a simple grid with a single periodic axis, with a left point
+``U`` and a center point ``T``, the numbers represent the index.
+Please note that the last U and T points are equal to the 1st ones (due to periodicity).
+From this grid we define 2 types of metrics, that represent the distance between the faces (U)
+and the center (T) points. Thus the distance between the faces defines the metric associated
+with the T point (we call it ``dxT``), and the distance between the center points
+defines the metric associated with the U point (called here ``dxU``).
+
+::
+
+
+
+    |             |             |             |             |
+    U------T------U------T------U------T------U------T------U------T
+    0      0      1      1      2      2      3      3      0      0
+    |             |             |             |             |
+    |<----dxT---->|<----dxT---->|<----dxT---->|<----dxT---->|
+    |             |             |             |             |
+           |<----dxU---->|<----dxU---->|<----dxU---->|<----dxU---->|
+
+
+
+You can see that each metric is linked to each point (the point ``T[0]`` has the metric
+``dxT[0]``, the point ``U[1]`` has the metric ``dxU[1]``, etc). In simple case the distances
+can be identical and thus only scalar
+(in the case of perfectly squared grid cells), in more complex cases
+they can vary with e.g. longitude, latitude, depth, or time. What matters is that the
+metric dimensions can be broadcasted against the dimensions of variables living at the
+same position (e.g. temperature at the cell center).
+
+In this simple periodic case, the grid / array boundaries are simple to deal with
+(extend the array). The next section gives some keys on how to deal with closed boundaries.
+
+
+Not periodic case
+.................
+
+Let's take the same grid as previously, but non periodic:
+
+::
+
+
+
+    |             |             |             |             |
+    U------T------U------T------U------T------U------T------|
+    0      0      1      1      2      2      3      3
+    |             |             |             |
+    |<----dxT---->|<----dxT---->|<----dxT---->|
+    |             |             |             |
+           |<----dxU---->|<----dxU---->|<----dxU---->|
+
+    
+We hit here a problem: the first U point ``U[0]`` and the last T point ``T[3]``
+are not surrounded by respectively 2 T points or 2 U points. In the easy case where these
+point are located inside the bathymetry or land (e.g. if one defines a square grid of
+the northern Atlantic Ocean, the eastern and western boundaries will probably
+be located in Europe and America), any number can fit for the metric, as it will
+not be used in any physical calculation. Note that a metric needs to exists in this point,
+it is not possible to have a shorter array!
